@@ -1,0 +1,26 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10">
+    <h1 class="text-2xl font-bold mb-4">AI Text Generator</h1>
+    <form id="text-form">
+        <textarea id="prompt" name="prompt" class="w-full p-2 border" placeholder="Enter your prompt here..."></textarea>
+        <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4">Generate</button>
+    </form>
+    <div id="result" class="mt-4 p-4 border"></div>
+</div>
+<script>
+document.getElementById('text-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const prompt = document.getElementById('prompt').value;
+    const response = await fetch("{% url 'generate_text' %}", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt })
+    });
+    const result = await response.json();
+    document.getElementById('result').innerText = result.text;
+});
+</script>
+{% endblock %}
